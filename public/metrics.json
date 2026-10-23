@@ -1,0 +1,12 @@
+{
+  "week": "2026-W43",
+  "version": "v0.0.1-board",
+  "users_total": 0,
+  "retention_d1": null,
+  "highlight": "搭好公开进度页；本周尚无正式小工具选题。",
+  "changelog": [
+    {"date": "2026-10-23", "text": "新增公开进度看板 v0（静态 metrics.json）"}
+  ],
+  "updated_at": "2026-10-23T13:00:00+08:00",
+  "source_note": "example/手填；上线后以仓库该文件为准"
+}

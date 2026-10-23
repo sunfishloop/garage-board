@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>车库造物 · 公开进度</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="wrap">
+    <h1>车库造物 · 公开进度</h1>
+    <p class="sub">每周一个版本 · 用户与踩坑全部公开</p>
+    <p id="err" class="err" hidden>指标暂不可用</p>
+    <section class="cards">
+      <div class="card"><div class="label">版本</div><div id="version" class="num">—</div></div>
+      <div class="card"><div class="label">累计用户</div><div id="users" class="num">—</div></div>
+      <div class="card"><div class="label">次日留存</div><div id="ret" class="num">—</div></div>
+    </section>
+    <section>
+      <h2>本周亮点</h2>
+      <p id="highlight">—</p>
+    </section>
+    <section>
+      <h2>最近更新</h2>
+      <ul id="log"></ul>
+    </section>
+    <footer>数据由项目公开维护，非实时 · <span id="updated"></span></footer>
+  </main>
+  <script>
+  async function load() {
+    try {
+      const r = await fetch("./public/metrics.json", { cache: "no-store" });
+      if (!r.ok) throw new Error(String(r.status));
+      const m = await r.json();
+      document.getElementById("version").textContent = m.version == null || m.version === "" ? "待接入" : m.version;
+      document.getElementById("users").textContent =
+        m.users_total == null ? "待接入" : (typeof m.users_total === "number" ? m.users_total : "—");
+      document.getElementById("ret").textContent =
+        m.retention_d1 == null ? "待接入" : (Math.round(m.retention_d1 * 1000) / 10) + "%";
+      document.getElementById("highlight").textContent = m.highlight == null || m.highlight === "" ? "待接入" : m.highlight;
+      document.getElementById("updated").textContent = m.updated_at || "";
+      const ul = document.getElementById("log");
+      ul.innerHTML = "";
+      (m.changelog || []).slice(0, 4).forEach((c) => {
+        const li = document.createElement("li");
+        li.textContent = (c.date || "") + " · " + (c.text || "");
+        ul.appendChild(li);
+      });
+    } catch (e) {
+      document.getElementById("err").hidden = false;
+    }
+  }
+  load();
+  </script>
+</body>
+</html>
